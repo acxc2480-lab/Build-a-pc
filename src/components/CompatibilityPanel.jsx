@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect, useRef } from 'react'
 import { formatPrice } from '../utils/compatibilityEngine'
+import { ErrorIcon, AlertIcon, CheckIcon, CopyIcon, RefreshIcon, LightningIcon, CategoryIcon } from './Icons'
 
 export default function CompatibilityPanel({
     compatibility,
@@ -16,47 +17,64 @@ export default function CompatibilityPanel({
     useEffect(() => {
         if (prevScore.current !== score) {
             setAnimateScore(true)
-            const t = setTimeout(() => setAnimateScore(false), 400)
+            const t = setTimeout(() => setAnimateScore(false), 350)
             prevScore.current = score
             return () => clearTimeout(t)
         }
     }, [score])
 
-    // Gauge arc calculation
     const gaugeRadius = 80
-    const gaugeCircumference = Math.PI * gaugeRadius // half-circle
+    const gaugeCircumference = Math.PI * gaugeRadius
     const gaugeFill = (score / 100) * gaugeCircumference
 
-    // Color based on score
     const scoreColor = useMemo(() => {
-        if (score >= 80) return '#22c55e'
-        if (score >= 60) return '#eab308'
+        if (score >= 80) return '#00e676'
+        if (score >= 60) return '#ffb300'
         if (score >= 40) return '#f97316'
-        return '#ef4444'
+        return '#ff3d3d'
     }, [score])
 
     const perfLevel = useMemo(() => {
-        if (score >= 90) return 'Xuất sắc'
-        if (score >= 75) return 'Tốt'
-        if (score >= 50) return 'Trung bình'
-        if (score >= 25) return 'Cần cải thiện'
-        return 'Chưa đủ dữ liệu'
+        if (score >= 90) return 'Excellent'
+        if (score >= 75) return 'Good'
+        if (score >= 50) return 'Average'
+        if (score >= 25) return 'Needs Improvement'
+        return 'Insufficient Data'
     }, [score])
+
+    // Determine glow class
+    const glowClass = useMemo(() => {
+        if (selectedCount < 2) return ''
+        if (issues.length > 0) return 'glow-red'
+        if (score >= 70) return 'glow-green'
+        return ''
+    }, [issues, score, selectedCount])
+
+    const pcImageGlow = useMemo(() => {
+        if (selectedCount < 2) return ''
+        if (issues.length > 0) return 'glow-red'
+        if (score >= 70) return 'glow-green'
+        return ''
+    }, [issues, score, selectedCount])
 
     return (
         <div className="compat-panel">
             {/* Score Card */}
-            <div className="score-card">
+            <div className={`score-card ${glowClass}`}>
                 <h3>Compatibility</h3>
+
+                {/* PC Image with dynamic glow */}
+                <div className={`score-pc-image ${pcImageGlow}`}>
+                    <img
+                        src="https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&q=85"
+                        alt="Gaming PC Build"
+                        loading="lazy"
+                    />
+                </div>
 
                 <div className={`gauge-container ${animateScore ? 'score-animate' : ''}`}>
                     <svg className="gauge-svg" viewBox="0 0 200 120">
-                        {/* Background arc */}
-                        <path
-                            className="gauge-bg"
-                            d="M 20 110 A 80 80 0 0 1 180 110"
-                        />
-                        {/* Filled arc */}
+                        <path className="gauge-bg" d="M 20 110 A 80 80 0 0 1 180 110" />
                         <path
                             className="gauge-fill"
                             d="M 20 110 A 80 80 0 0 1 180 110"
@@ -66,17 +84,15 @@ export default function CompatibilityPanel({
                                 strokeDashoffset: `${gaugeCircumference - gaugeFill}`,
                             }}
                         />
-                        {/* Score text */}
-                        <text x="100" y="90" textAnchor="middle" className="gauge-score" style={{ fill: scoreColor }}>
+                        <text x="100" y="88" textAnchor="middle" className="gauge-score" style={{ fill: scoreColor }}>
                             {selectedCount >= 2 ? `${score}%` : '—'}
                         </text>
-                        <text x="100" y="108" textAnchor="middle" className="gauge-label">
+                        <text x="100" y="106" textAnchor="middle" className="gauge-label">
                             Compatibility Rating
                         </text>
                     </svg>
                 </div>
 
-                {/* Performance Bar */}
                 <div className="perf-bar-section">
                     <div className="perf-bar-header">
                         <span>Performance potential</span>
@@ -93,13 +109,11 @@ export default function CompatibilityPanel({
                     </div>
                 </div>
 
-                {/* Total Price */}
                 <div className="price-total">
-                    <div className="label">Estimate total</div>
+                    <div className="label">Estimate Total</div>
                     <div className="amount">{formatPrice(totalPrice)}</div>
                 </div>
 
-                {/* Action Buttons */}
                 <div className="action-buttons">
                     <button className="btn-primary" onClick={() => {
                         const buildSummary = Object.entries(selectedComponents)
@@ -107,27 +121,27 @@ export default function CompatibilityPanel({
                             .map(([k, v]) => `${k.toUpperCase()}: ${v.name} - ${formatPrice(v.price)}`)
                             .join('\n')
                         const total = formatPrice(totalPrice)
-                        const text = `🖥️ PC Build từ Semcomputer\n\n${buildSummary}\n\n💰 Tổng: ${total}\n✅ Compatibility: ${score}%`
+                        const text = `PC Build - Semcomputer\n\n${buildSummary}\n\nTotal: ${total}\nCompatibility: ${score}%`
                         navigator.clipboard?.writeText(text)
-                        alert('Đã copy cấu hình vào clipboard!')
+                        alert('Build configuration copied to clipboard!')
                     }}>
-                        Confirm Build
+                        <CopyIcon size={14} /> Confirm Build
                     </button>
                     <button className="btn-secondary" onClick={onReset}>
-                        Reset
+                        <RefreshIcon size={14} /> Reset
                     </button>
                 </div>
             </div>
 
-            {/* Issues Panel */}
+            {/* Issues */}
             {(issues.length > 0 || warnings.length > 0 || strengths.length > 0) && (
                 <div className="issues-panel">
                     {issues.length > 0 && (
                         <>
-                            <h4>🔴 Lỗi không tương thích ({issues.length})</h4>
+                            <h4><ErrorIcon size={14} /> Incompatible ({issues.length})</h4>
                             {issues.map((issue, i) => (
-                                <div key={`issue-${i}`} className="issue-item">
-                                    <span className="issue-icon">{issue.icon}</span>
+                                <div key={`issue-${i}`} className="issue-item error">
+                                    <span className="issue-icon error"><ErrorIcon size={14} /></span>
                                     <div className="issue-content">
                                         <div className="issue-title">{issue.title}</div>
                                         <div className="issue-detail">{issue.detail}</div>
@@ -139,12 +153,12 @@ export default function CompatibilityPanel({
 
                     {warnings.length > 0 && (
                         <>
-                            <h4 style={{ marginTop: issues.length > 0 ? '1rem' : 0 }}>
-                                ⚠️ Cảnh báo ({warnings.length})
+                            <h4 style={{ marginTop: issues.length > 0 ? '0.75rem' : 0 }}>
+                                <AlertIcon size={14} /> Warnings ({warnings.length})
                             </h4>
                             {warnings.map((warning, i) => (
                                 <div key={`warn-${i}`} className="issue-item warning">
-                                    <span className="issue-icon">{warning.icon}</span>
+                                    <span className="issue-icon warning"><AlertIcon size={14} /></span>
                                     <div className="issue-content">
                                         <div className="issue-title">{warning.title}</div>
                                         <div className="issue-detail">{warning.detail}</div>
@@ -156,12 +170,12 @@ export default function CompatibilityPanel({
 
                     {strengths.length > 0 && (
                         <>
-                            <h4 style={{ marginTop: (issues.length > 0 || warnings.length > 0) ? '1rem' : 0 }}>
-                                ✅ Tương thích ({strengths.length})
+                            <h4 style={{ marginTop: (issues.length > 0 || warnings.length > 0) ? '0.75rem' : 0 }}>
+                                <CheckIcon size={14} /> Compatible ({strengths.length})
                             </h4>
                             {strengths.map((str, i) => (
                                 <div key={`str-${i}`} className="issue-item strength">
-                                    <span className="issue-icon">{str.icon}</span>
+                                    <span className="issue-icon success"><CheckIcon size={14} /></span>
                                     <div className="issue-content">
                                         <div className="issue-title">{str.title}</div>
                                         <div className="issue-detail">{str.detail}</div>
@@ -176,11 +190,11 @@ export default function CompatibilityPanel({
             {/* Smart Suggestions */}
             {suggestions.length > 0 && (
                 <div className="suggestions-panel">
-                    <h4>💡 Gợi ý thông minh</h4>
+                    <h4><LightningIcon size={14} /> Smart Suggestions</h4>
                     {suggestions.map((sg, i) => (
                         <div key={`sg-${i}`} className="suggestion-group">
                             <div className="suggestion-group-header">
-                                <span className="sg-icon">{sg.icon}</span>
+                                <span className="sg-icon"><CategoryIcon categoryId={sg.category} size={14} /></span>
                                 <span className="sg-title">{sg.title}</span>
                                 <span className="sg-detail">{sg.detail}</span>
                             </div>

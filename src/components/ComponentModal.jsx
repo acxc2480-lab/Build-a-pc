@@ -1,81 +1,34 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { formatPrice } from '../utils/compatibilityEngine'
 import { componentCategories } from '../data/components'
+import { CategoryIcon, CloseIcon, SearchIcon } from './Icons'
 
-// Helper to get component specs for display
 function getSpecs(category, component) {
     switch (category) {
         case 'cpu':
-            return [
-                component.socket,
-                `${component.cores}C/${component.threads}T`,
-                `${component.boostClock}GHz`,
-                `${component.tdp}W TDP`,
-                component.ramType.join('/'),
-            ]
+            return [component.socket, `${component.cores}C/${component.threads}T`, `${component.boostClock}GHz`, `${component.tdp}W TDP`, component.ramType.join('/')]
         case 'vga':
-            return [
-                `${component.vram}GB VRAM`,
-                `${component.tdp}W`,
-                `${component.length}mm`,
-                `PSU ≥${component.recommendedPSU}W`,
-            ]
+            return [`${component.vram}GB VRAM`, `${component.tdp}W`, `${component.length}mm`, `PSU ≥${component.recommendedPSU}W`]
         case 'mainboard':
-            return [
-                component.socket,
-                component.chipset,
-                component.formFactor,
-                component.ramType,
-                `${component.ramSlots} slots`,
-                `${component.m2Slots} M.2`,
-            ]
+            return [component.socket, component.chipset, component.formFactor, component.ramType, `${component.ramSlots} slots`, `${component.m2Slots} M.2`]
         case 'ram':
-            return [
-                component.type,
-                `${component.capacity}GB`,
-                `${component.speed}MHz`,
-                `${component.sticks} thanh`,
-                component.latency,
-            ]
+            return [component.type, `${component.capacity}GB`, `${component.speed}MHz`, `${component.sticks} stick${component.sticks > 1 ? 's' : ''}`, component.latency]
         case 'ssd':
-            return [
-                component.type,
-                `${component.capacity}GB`,
-                `Read ${component.readSpeed}MB/s`,
-            ]
+            return [component.type, `${component.capacity}GB`, `Read ${component.readSpeed}MB/s`]
         case 'hdd':
-            return [
-                `${component.capacity}GB`,
-                `${component.rpm}RPM`,
-                `${component.cache}MB Cache`,
-            ]
+            return [`${component.capacity}GB`, `${component.rpm}RPM`, `${component.cache}MB Cache`]
         case 'psu':
-            return [
-                `${component.wattage}W`,
-                component.efficiency,
-                component.modular,
-            ]
+            return [`${component.wattage}W`, component.efficiency, component.modular]
         case 'cooling':
-            return [
-                component.type,
-                `TDP ≤${component.tdpSupport}W`,
-                component.radiatorSize ? `${component.radiatorSize}mm` : `${component.height}mm cao`,
-            ]
+            return [component.type, `TDP ≤${component.tdpSupport}W`, component.radiatorSize ? `${component.radiatorSize}mm` : `${component.height}mm`]
         case 'case':
-            return [
-                component.formFactor.join(', '),
-                `GPU ≤${component.maxGPULength}mm`,
-                `Cooler ≤${component.maxCoolerHeight}mm`,
-            ]
-        default:
-            return []
+            return [component.formFactor.join(', '), `GPU ≤${component.maxGPULength}mm`, `Cooler ≤${component.maxCoolerHeight}mm`]
+        default: return []
     }
 }
 
-// Check if a component is compatible with current selections
 function isComponentCompatible(category, component, selectedComponents) {
     const { cpu, mainboard, ram } = selectedComponents
-
     switch (category) {
         case 'mainboard':
             if (cpu && component.socket !== cpu.socket) return false
@@ -97,8 +50,7 @@ function isComponentCompatible(category, component, selectedComponents) {
         case 'cooling':
             if (cpu && component.sockets && !component.sockets.includes(cpu.socket)) return false
             return true
-        default:
-            return true
+        default: return true
     }
 }
 
@@ -118,18 +70,10 @@ export default function ComponentModal({ category, components, selectedComponent
         let items = components
         if (search.trim()) {
             const q = search.toLowerCase()
-            items = items.filter(c =>
-                c.name.toLowerCase().includes(q) ||
-                c.brand?.toLowerCase().includes(q)
-            )
+            items = items.filter(c => c.name.toLowerCase().includes(q) || c.brand?.toLowerCase().includes(q))
         }
-
-        // Sort: compatible first, then by price
         return items
-            .map(c => ({
-                ...c,
-                compatible: isComponentCompatible(category, c, selectedComponents),
-            }))
+            .map(c => ({ ...c, compatible: isComponentCompatible(category, c, selectedComponents) }))
             .sort((a, b) => {
                 if (a.compatible !== b.compatible) return a.compatible ? -1 : 1
                 return a.price - b.price
@@ -140,15 +84,20 @@ export default function ComponentModal({ category, components, selectedComponent
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
             <div className="modal-content">
                 <div className="modal-header">
-                    <h3>{categoryInfo?.icon} Chọn {categoryInfo?.name || category}</h3>
-                    <button className="modal-close" onClick={onClose}>✕</button>
+                    <h3>
+                        <CategoryIcon categoryId={category} size={18} />
+                        Select {categoryInfo?.name || category}
+                    </h3>
+                    <button className="modal-close" onClick={onClose}>
+                        <CloseIcon size={14} />
+                    </button>
                 </div>
 
                 <div className="modal-search">
                     <input
                         ref={inputRef}
                         type="text"
-                        placeholder={`Tìm kiếm ${categoryInfo?.name || category}...`}
+                        placeholder={`Search ${categoryInfo?.name || category}...`}
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
@@ -157,8 +106,8 @@ export default function ComponentModal({ category, components, selectedComponent
                 <div className="modal-body">
                     {filteredComponents.length === 0 ? (
                         <div className="empty-state">
-                            <div className="empty-icon">🔍</div>
-                            <p>Không tìm thấy linh kiện phù hợp</p>
+                            <SearchIcon size={40} />
+                            <p>No matching components found</p>
                         </div>
                     ) : (
                         filteredComponents.map((component) => (
@@ -168,7 +117,7 @@ export default function ComponentModal({ category, components, selectedComponent
                                 onClick={() => onSelect(component)}
                             >
                                 <div className="co-icon">
-                                    {categoryInfo?.icon}
+                                    <CategoryIcon categoryId={category} size={18} />
                                 </div>
                                 <div className="co-details">
                                     <div className="co-name">{component.name}</div>
@@ -180,10 +129,8 @@ export default function ComponentModal({ category, components, selectedComponent
                                 </div>
                                 <div style={{ textAlign: 'right' }}>
                                     <div className="co-price">{formatPrice(component.price)}</div>
-                                    <div
-                                        className={`co-compat-badge ${component.compatible ? 'compatible' : 'incompatible'}`}
-                                    >
-                                        {component.compatible ? '✓ Tương thích' : '✗ Không tương thích'}
+                                    <div className={`co-compat-badge ${component.compatible ? 'compatible' : 'incompatible'}`}>
+                                        {component.compatible ? 'Compatible' : 'Incompatible'}
                                     </div>
                                 </div>
                             </div>

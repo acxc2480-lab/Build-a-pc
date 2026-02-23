@@ -1,8 +1,11 @@
+import { LightningIcon } from './Icons'
+
 export default function PresetBuilds({ presets, onApplyPreset }) {
     return (
         <section className="presets-section">
             <div className="presets-header">
-                <h3>⚡ Cấu hình gợi ý nhanh</h3>
+                <LightningIcon size={14} />
+                <h3>Quick Configurations</h3>
             </div>
             <div className="preset-grid">
                 {presets.map((preset) => (

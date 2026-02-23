@@ -22,14 +22,12 @@ export function checkCompatibility(selectedComponents) {
         if (cpu.socket !== mainboard.socket) {
             issues.push({
                 type: 'critical',
-                icon: '🔴',
                 title: 'Socket không tương thích',
                 detail: `CPU ${cpu.name} sử dụng socket ${cpu.socket}, nhưng mainboard ${mainboard.name} sử dụng socket ${mainboard.socket}. Hai linh kiện này KHÔNG thể hoạt động cùng nhau.`,
                 components: ['cpu', 'mainboard'],
             });
         } else {
             strengths.push({
-                icon: '✅',
                 title: 'Socket tương thích',
                 detail: `CPU và Mainboard đều sử dụng socket ${cpu.socket}.`,
             });
@@ -42,7 +40,6 @@ export function checkCompatibility(selectedComponents) {
         if (!cpuSupportsRamType) {
             issues.push({
                 type: 'critical',
-                icon: '🔴',
                 title: 'RAM Type không tương thích',
                 detail: `CPU ${cpu.name} hỗ trợ ${cpu.ramType.join(', ')}, nhưng mainboard ${mainboard.name} sử dụng ${mainboard.ramType}.`,
                 components: ['cpu', 'mainboard'],
@@ -55,14 +52,12 @@ export function checkCompatibility(selectedComponents) {
         if (ram.type !== mainboard.ramType) {
             issues.push({
                 type: 'critical',
-                icon: '🔴',
                 title: 'RAM không tương thích với Mainboard',
                 detail: `RAM ${ram.name} là ${ram.type}, nhưng mainboard ${mainboard.name} chỉ hỗ trợ ${mainboard.ramType}.`,
                 components: ['ram', 'mainboard'],
             });
         } else {
             strengths.push({
-                icon: '✅',
                 title: 'RAM tương thích',
                 detail: `RAM ${ram.type} tương thích với mainboard.`,
             });
@@ -72,7 +67,6 @@ export function checkCompatibility(selectedComponents) {
         if (ram.capacity > mainboard.maxRam) {
             warnings.push({
                 type: 'warning',
-                icon: '⚠️',
                 title: 'RAM vượt quá giới hạn',
                 detail: `RAM ${ram.capacity}GB vượt quá giới hạn ${mainboard.maxRam}GB của mainboard ${mainboard.name}.`,
                 components: ['ram', 'mainboard'],
@@ -83,7 +77,6 @@ export function checkCompatibility(selectedComponents) {
         if (ram.sticks > mainboard.ramSlots) {
             issues.push({
                 type: 'critical',
-                icon: '🔴',
                 title: 'Không đủ slot RAM',
                 detail: `RAM kit ${ram.sticks} thanh nhưng mainboard chỉ có ${mainboard.ramSlots} slot.`,
                 components: ['ram', 'mainboard'],
@@ -96,7 +89,6 @@ export function checkCompatibility(selectedComponents) {
         if (!cpu.ramType.includes(ram.type)) {
             issues.push({
                 type: 'critical',
-                icon: '🔴',
                 title: 'CPU không hỗ trợ loại RAM này',
                 detail: `CPU ${cpu.name} hỗ trợ ${cpu.ramType.join(', ')}, nhưng RAM là ${ram.type}.`,
                 components: ['cpu', 'ram'],
@@ -117,7 +109,6 @@ export function checkCompatibility(selectedComponents) {
         if (headroom < 0) {
             issues.push({
                 type: 'critical',
-                icon: '🔴',
                 title: 'PSU không đủ công suất',
                 detail: `Hệ thống ước tính cần ~${estimatedTDP}W, nhưng PSU chỉ có ${psu.wattage}W. Thiếu ${Math.abs(headroom)}W!`,
                 components: ['psu'],
@@ -125,14 +116,12 @@ export function checkCompatibility(selectedComponents) {
         } else if (headroomPercent < 20) {
             warnings.push({
                 type: 'warning',
-                icon: '⚠️',
                 title: 'PSU gần đầy tải',
                 detail: `PSU ${psu.wattage}W với ước tính ${estimatedTDP}W (~${Math.round((estimatedTDP / psu.wattage) * 100)}% tải). Nên chọn PSU có headroom 20-30%.`,
                 components: ['psu'],
             });
         } else {
             strengths.push({
-                icon: '✅',
                 title: 'PSU đủ công suất',
                 detail: `PSU ${psu.wattage}W đủ cho hệ thống ~${estimatedTDP}W (${Math.round(headroomPercent)}% dư).`,
             });
@@ -142,7 +131,6 @@ export function checkCompatibility(selectedComponents) {
         if (vga && psu.wattage < vga.recommendedPSU) {
             warnings.push({
                 type: 'warning',
-                icon: '⚠️',
                 title: 'PSU dưới mức khuyến nghị GPU',
                 detail: `${vga.name} khuyến nghị PSU tối thiểu ${vga.recommendedPSU}W, nhưng PSU chỉ có ${psu.wattage}W.`,
                 components: ['psu', 'vga'],
@@ -155,14 +143,12 @@ export function checkCompatibility(selectedComponents) {
         if (cooling.tdpSupport < cpu.tdp) {
             warnings.push({
                 type: 'warning',
-                icon: '⚠️',
                 title: 'Tản nhiệt có thể không đủ',
                 detail: `Tản nhiệt ${cooling.name} hỗ trợ TDP ${cooling.tdpSupport}W, CPU cần ${cpu.tdp}W. Có thể throttle khi full load.`,
                 components: ['cooling', 'cpu'],
             });
         } else {
             strengths.push({
-                icon: '✅',
                 title: 'Tản nhiệt phù hợp',
                 detail: `${cooling.name} (${cooling.tdpSupport}W) đủ mát cho ${cpu.name} (${cpu.tdp}W TDP).`,
             });
@@ -172,7 +158,6 @@ export function checkCompatibility(selectedComponents) {
         if (cooling.sockets && !cooling.sockets.includes(cpu.socket)) {
             issues.push({
                 type: 'critical',
-                icon: '🔴',
                 title: 'Tản nhiệt không hỗ trợ socket',
                 detail: `${cooling.name} không hỗ trợ socket ${cpu.socket} của CPU.`,
                 components: ['cooling', 'cpu'],
@@ -185,14 +170,12 @@ export function checkCompatibility(selectedComponents) {
         if (!pcCase.formFactor.includes(mainboard.formFactor)) {
             issues.push({
                 type: 'critical',
-                icon: '🔴',
                 title: 'Case không vừa Mainboard',
                 detail: `Case ${pcCase.name} hỗ trợ ${pcCase.formFactor.join(', ')}, nhưng mainboard ${mainboard.name} là ${mainboard.formFactor}.`,
                 components: ['case', 'mainboard'],
             });
         } else {
             strengths.push({
-                icon: '✅',
                 title: 'Case tương thích Mainboard',
                 detail: `Case hỗ trợ form factor ${mainboard.formFactor} của mainboard.`,
             });
@@ -204,7 +187,6 @@ export function checkCompatibility(selectedComponents) {
         if (vga.length > pcCase.maxGPULength) {
             issues.push({
                 type: 'critical',
-                icon: '🔴',
                 title: 'GPU quá dài cho case',
                 detail: `${vga.name} dài ${vga.length}mm, case chỉ chứa được tối đa ${pcCase.maxGPULength}mm.`,
                 components: ['case', 'vga'],
@@ -214,7 +196,6 @@ export function checkCompatibility(selectedComponents) {
             if (clearance < 20) {
                 warnings.push({
                     type: 'warning',
-                    icon: '⚠️',
                     title: 'GPU vừa khít case',
                     detail: `GPU dài ${vga.length}mm, case max ${pcCase.maxGPULength}mm. Chỉ còn ${clearance}mm dư.`,
                     components: ['case', 'vga'],
@@ -228,7 +209,6 @@ export function checkCompatibility(selectedComponents) {
         if (cooling.height > pcCase.maxCoolerHeight) {
             issues.push({
                 type: 'critical',
-                icon: '🔴',
                 title: 'Tản nhiệt quá cao cho case',
                 detail: `${cooling.name} cao ${cooling.height}mm, case chỉ chứa được tối đa ${pcCase.maxCoolerHeight}mm.`,
                 components: ['case', 'cooling'],
@@ -241,7 +221,6 @@ export function checkCompatibility(selectedComponents) {
         if (!pcCase.radiatorSupport.includes(cooling.radiatorSize)) {
             issues.push({
                 type: 'critical',
-                icon: '🔴',
                 title: 'Case không hỗ trợ radiator',
                 detail: `Case ${pcCase.name} hỗ trợ radiator ${pcCase.radiatorSupport.join('/')}mm, nhưng ${cooling.name} là ${cooling.radiatorSize}mm.`,
                 components: ['case', 'cooling'],
@@ -254,14 +233,12 @@ export function checkCompatibility(selectedComponents) {
         if (mainboard.m2Slots === 0) {
             issues.push({
                 type: 'critical',
-                icon: '🔴',
                 title: 'Mainboard không có slot M.2',
                 detail: `Mainboard ${mainboard.name} không có slot M.2 cho SSD NVMe.`,
                 components: ['ssd', 'mainboard'],
             });
         } else {
             strengths.push({
-                icon: '✅',
                 title: 'SSD M.2 tương thích',
                 detail: `Mainboard có ${mainboard.m2Slots} slot M.2.`,
             });
@@ -279,7 +256,6 @@ export function checkCompatibility(selectedComponents) {
             if (cpuTierIdx > vgaTierIdx) {
                 warnings.push({
                     type: 'warning',
-                    icon: '⚠️',
                     title: 'GPU yếu so với CPU (Bottleneck)',
                     detail: `CPU tier "${cpu.tier}" mạnh hơn nhiều so với GPU tier "${vga.tier}". GPU có thể trở thành bottleneck trong game.`,
                     components: ['cpu', 'vga'],
@@ -287,7 +263,6 @@ export function checkCompatibility(selectedComponents) {
             } else {
                 warnings.push({
                     type: 'warning',
-                    icon: '⚠️',
                     title: 'CPU yếu so với GPU (Bottleneck)',
                     detail: `GPU tier "${vga.tier}" mạnh hơn nhiều so với CPU tier "${cpu.tier}". CPU có thể trở thành bottleneck.`,
                     components: ['cpu', 'vga'],
@@ -295,7 +270,6 @@ export function checkCompatibility(selectedComponents) {
             }
         } else if (tierDiff <= 1) {
             strengths.push({
-                icon: '✅',
                 title: 'Cân bằng CPU/GPU tốt',
                 detail: `CPU và GPU ở tier tương đương, hiệu năng cân bằng.`,
             });
@@ -344,7 +318,6 @@ export function getSmartSuggestions(selectedComponents, allComponents) {
         if (compatibleBoards.length > 0) {
             suggestions.push({
                 category: 'mainboard',
-                icon: '🔧',
                 title: 'Mainboard gợi ý',
                 detail: `Dựa trên CPU ${cpu.name} (${cpu.socket})`,
                 items: compatibleBoards.slice(0, 3),
@@ -358,7 +331,6 @@ export function getSmartSuggestions(selectedComponents, allComponents) {
         if (compatibleRam.length > 0) {
             suggestions.push({
                 category: 'ram',
-                icon: '💾',
                 title: 'RAM gợi ý',
                 detail: `Mainboard hỗ trợ ${mainboard.ramType}`,
                 items: compatibleRam.slice(0, 3),
@@ -371,13 +343,12 @@ export function getSmartSuggestions(selectedComponents, allComponents) {
         let estimatedTDP = 50;
         if (cpu) estimatedTDP += cpu.tdp;
         if (vga) estimatedTDP += vga.tdp;
-        const recommendedWattage = Math.ceil(estimatedTDP * 1.3 / 50) * 50; // 30% headroom, round up to 50
+        const recommendedWattage = Math.ceil(estimatedTDP * 1.3 / 50) * 50;
 
         const suitablePSUs = allComponents.psu.filter(p => p.wattage >= recommendedWattage);
         if (suitablePSUs.length > 0) {
             suggestions.push({
                 category: 'psu',
-                icon: '⚡',
                 title: 'PSU gợi ý',
                 detail: `Hệ thống cần ~${estimatedTDP}W, khuyến nghị ≥${recommendedWattage}W`,
                 items: suitablePSUs.slice(0, 3),
@@ -393,7 +364,6 @@ export function getSmartSuggestions(selectedComponents, allComponents) {
         if (suitableCoolers.length > 0) {
             suggestions.push({
                 category: 'cooling',
-                icon: '❄️',
                 title: 'Tản nhiệt gợi ý',
                 detail: `CPU ${cpu.name} có TDP ${cpu.tdp}W`,
                 items: suitableCoolers.slice(0, 3),
@@ -410,7 +380,6 @@ export function getSmartSuggestions(selectedComponents, allComponents) {
         if (balancedGPUs.length > 0) {
             suggestions.push({
                 category: 'vga',
-                icon: '🎮',
                 title: 'VGA gợi ý',
                 detail: `Cân bằng với CPU tier "${cpu.tier}"`,
                 items: balancedGPUs.slice(0, 3),
