@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import { componentCategories, allComponents, presetBuilds } from './data/components'
 import { checkCompatibility, getSmartSuggestions, formatPrice, calculateTotalPrice } from './utils/compatibilityEngine'
 import Navbar from './components/Navbar'
@@ -11,17 +11,26 @@ import Footer from './components/Footer'
 import './index.css'
 
 function App() {
+  const [isDark, setIsDark] = useState(false) // Default: light theme
   const [selectedComponents, setSelectedComponents] = useState({
     cpu: null, vga: null, mainboard: null, ram: null,
     ssd: null, hdd: null, psu: null, cooling: null, case: null,
   })
   const [modalCategory, setModalCategory] = useState(null)
 
+  // Apply theme class to html element
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')
+  }, [isDark])
+
+  const toggleTheme = useCallback(() => {
+    setIsDark(prev => !prev)
+  }, [])
+
   const compatibility = useMemo(() => checkCompatibility(selectedComponents), [selectedComponents])
   const suggestions = useMemo(() => getSmartSuggestions(selectedComponents, allComponents), [selectedComponents])
   const totalPrice = useMemo(() => calculateTotalPrice(selectedComponents), [selectedComponents])
 
-  // Determine hero glow state based on compatibility
   const heroGlowState = useMemo(() => {
     if (compatibility.selectedCount < 2) return 'neutral'
     if (compatibility.issues.length > 0) return 'red'
@@ -68,7 +77,7 @@ function App() {
 
   return (
     <>
-      <Navbar />
+      <Navbar isDark={isDark} onToggleTheme={toggleTheme} />
       <Hero glowState={heroGlowState} />
       <PresetBuilds presets={presetBuilds} onApplyPreset={handleApplyPreset} />
 
