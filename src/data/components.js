@@ -889,7 +889,7 @@ export const presetBuilds = [
                 description: '(Intel Core Ultra 9 285K/ VGA RTX 5090)',
                 originalPrice: '207.820.000 ₫',
                 price: '188.880.000 ₫',
-                image: '/PIC1.jpg',
+                image: '/49b8c87e-6574-409e-91a3-763cfac8bbea.jpg',
                 components: {
                     cpu: 'cpu-4',
                     vga: 'vga-6',
@@ -925,7 +925,7 @@ export const presetBuilds = [
                 description: '/ VGA RX 6500XT',
                 originalPrice: '12.130.000 ₫',
                 price: '11.390.000 ₫',
-                image: '/49b8c87e-6574-409e-91a3-763cfac8bbea.jpg',
+                image: '/f956befb-6b1d-487c-b88d-ad4a4527ba3a.jpg',
                 components: {
                     cpu: 'cpu-9',
                     vga: 'vga-9',
@@ -948,7 +948,7 @@ export const presetBuilds = [
                 description: '(Intel i5-13400/ VGA RTX 5060)',
                 originalPrice: '38.220.000 ₫',
                 price: '34.690.000 ₫',
-                image: '/67df74d3-9f52-4971-9355-269c65b5cab3.jpg',
+                image: '/dea94514-c444-4e28-936b-7142f5d28790.jpg',
                 components: {
                     cpu: 'cpu-2',
                     vga: 'vga-1',
@@ -966,7 +966,7 @@ export const presetBuilds = [
                 description: 'R3 3200G/ 8GB/ 256GB',
                 originalPrice: '8.400.000 ₫',
                 price: '7.290.000 ₫',
-                image: '/dea94514-c444-4e28-936b-7142f5d28790.jpg',
+                image: '/PIC1.jpg',
                 components: {
                     cpu: 'cpu-8',
                     vga: 'vga-9',
@@ -984,7 +984,7 @@ export const presetBuilds = [
                 description: '/ VGA RX 6500XT (H610)',
                 originalPrice: '15.120.000 ₫',
                 price: '13.990.000 ₫',
-                image: '/f956befb-6b1d-487c-b88d-ad4a4527ba3a.jpg',
+                image: '/67df74d3-9f52-4971-9355-269c65b5cab3.jpg',
                 components: {
                     cpu: 'cpu-1',
                     vga: 'vga-9',
@@ -1007,7 +1007,7 @@ export const presetBuilds = [
                 description: '/ VGA ARC B580 (DDR5)',
                 originalPrice: '35.637.000 ₫',
                 price: '32.599.000 ₫',
-                image: '/PIC1.jpg',
+                image: 'https://semcomputer.com/wp-content/uploads/2025/12/pc_khach_full_asus_rog_png_png_10_1538b94074ad42fe945528b7f26656e3_master-1-800x800.png',
                 components: {
                     cpu: 'cpu-5',
                     vga: 'vga-7',
@@ -1025,7 +1025,7 @@ export const presetBuilds = [
                 description: '(Intel Core Ultra 9 285K/ VGA RTX 5090)',
                 originalPrice: '177.820.000 ₫',
                 price: '169.990.000 ₫',
-                image: '/0ea16187-62ab-4952-8a25-8701ca64f567.jpg',
+                image: 'https://semcomputer.com/wp-content/uploads/2025/12/artboard_2_copy_2_b26b97e389e04693934b7a457652d385_master-800x800.png',
                 components: {
                     cpu: 'cpu-4',
                     vga: 'vga-6',
@@ -1043,7 +1043,7 @@ export const presetBuilds = [
                 description: '/ VGA RTX 5080',
                 originalPrice: '73.320.000 ₫',
                 price: '71.390.000 ₫',
-                image: '/67df74d3-9f52-4971-9355-269c65b5cab3.jpg',
+                image: 'https://semcomputer.com/wp-content/uploads/2025/12/web__61_of_86__aea66174cf754130b266656c48778519_master-800x800.jpg',
                 components: {
                     cpu: 'cpu-3',
                     vga: 'vga-5',
