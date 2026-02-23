@@ -1,0 +1,25 @@
+export default function PresetBuilds({ presets, onApplyPreset }) {
+    return (
+        <section className="presets-section">
+            <div className="presets-header">
+                <h3>⚡ Cấu hình gợi ý nhanh</h3>
+            </div>
+            <div className="preset-grid">
+                {presets.map((preset) => (
+                    <div
+                        key={preset.id}
+                        className="preset-card"
+                        onClick={() => onApplyPreset(preset)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => e.key === 'Enter' && onApplyPreset(preset)}
+                    >
+                        <h4>{preset.name}</h4>
+                        <p>{preset.description}</p>
+                        <div className="budget">{preset.budget}</div>
+                    </div>
+                ))}
+            </div>
+        </section>
+    )
+}
