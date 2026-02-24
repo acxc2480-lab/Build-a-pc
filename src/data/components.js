@@ -158,6 +158,22 @@ export const cpuData = [
         tier: 'budget',
         image: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=200&h=200&fit=crop',
     },
+    {
+        id: 'cpu-10',
+        name: 'AMD Ryzen 3 3200G',
+        brand: 'AMD',
+        price: 1590000,
+        socket: 'AM4',
+        cores: 4,
+        threads: 4,
+        baseClock: 3.6,
+        boostClock: 4.0,
+        tdp: 65,
+        ramType: ['DDR4'],
+        generation: 'Zen+',
+        tier: 'budget',
+        image: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=200&h=200&fit=crop',
+    },
 ];
 
 export const vgaData = [

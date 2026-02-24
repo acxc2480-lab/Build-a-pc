@@ -13,8 +13,8 @@ export default function Hero({ glowState }) {
                     Build & Score <span className="accent">PC</span>
                 </h1>
                 <p>
-                    Kiểm tra độ tương thích linh kiện, xây dựng cấu hình PC hoàn hảo
-                    với gợi ý thông minh từ hệ thống
+                    Check component compatibility and build the perfect PC configuration
+                    with smart suggestions from our system.
                 </p>
             </div>
         </section>

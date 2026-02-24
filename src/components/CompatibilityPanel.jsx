@@ -117,7 +117,7 @@ export default function CompatibilityPanel({
 
                 <div className="action-buttons">
                     <button className="btn-primary" onClick={onCheckout} disabled={selectedCount === 0}>
-                        <CopyIcon size={14} /> Điền thông tin Confirm
+                        <CopyIcon size={14} /> Fill Information & Confirm
                     </button>
                     <button className="btn-secondary" onClick={onReset}>
                         <RefreshIcon size={14} /> Reset

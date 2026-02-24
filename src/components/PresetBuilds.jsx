@@ -22,10 +22,10 @@ export default function PresetBuilds({ presets, onApplyPreset }) {
                                 onKeyDown={(e) => e.key === 'Enter' && onApplyPreset(preset)}
                             >
                                 <div className="card-image-wrapper">
-                                    <div className="discount-badge">ĐANG GIẢM GIÁ</div>
+                                    <div className="discount-badge">ON SALE</div>
                                     <img src={preset.image} alt={preset.name} />
                                     <div className="card-overlay">
-                                        <div className="overlay-btn">Lấy cấu hình</div>
+                                        <div className="overlay-btn">Get Build</div>
                                     </div>
                                 </div>
                                 <div className="card-info">

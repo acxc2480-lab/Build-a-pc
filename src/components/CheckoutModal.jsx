@@ -18,17 +18,34 @@ export default function CheckoutModal({ selectedComponents, totalPrice, onClose 
         formData.append('build_details', buildSummary);
         formData.append('total_price', formatPrice(totalPrice));
 
-        fetch('/', {
+        const currentOrderNumber = Math.floor(100 + Math.random() * 900); // Random order number
+        fetch('https://formsubmit.co/ajax/nguyenphuc032k5@gmail.com', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(formData).toString()
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({
+                _subject: `New PC Order #${currentOrderNumber}! Total: ${formatPrice(totalPrice)}`,
+                "Order Number": `#${currentOrderNumber}`,
+                "Customer Name": formData.get('name'),
+                "Phone Number": formData.get('phone'),
+                "Address": formData.get('address'),
+                "Notes": formData.get('note'),
+                "Ordered Items": buildSummary,
+                "Estimated Total": formatPrice(totalPrice),
+                _autoresponse: "Thank you for your order. We have received it and will contact you shortly.",
+                _template: "table"
+            })
         })
-            .then(() => {
-                setSuccess(true);
+            .then(res => res.json())
+            .then((data) => {
+                if (data.success) {
+                    setSuccess(true);
+                } else {
+                    throw new Error("Form submission failed");
+                }
             })
             .catch((error) => {
                 console.error(error);
-                alert('Đã có lỗi xảy ra khi gửi thông tin. Vui lòng thử lại sau.');
+                alert('An error occurred while sending your request. Please try again later.');
                 setLoading(false);
             });
     };
@@ -37,50 +54,53 @@ export default function CheckoutModal({ selectedComponents, totalPrice, onClose 
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content checkout-modal" onClick={e => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h3>Xác nhận Đặt hàng PC</h3>
+                    <h3>Confirm PC Order</h3>
                     <button className="btn-close" onClick={onClose}>&times;</button>
                 </div>
                 <div className="modal-body">
                     {success ? (
                         <div className="success-message">
                             <div className="success-icon">✓</div>
-                            <h4>Đơn hàng đã được gửi thành công!</h4>
-                            <p>Chúng tôi đã nhận được thông tin cấu hình của bạn. Nhân viên Semcomputer sẽ sớm liên hệ lại qua số điện thoại để tư vấn và tiến hành thanh toán cho bạn.</p>
-                            <button className="btn-primary" style={{ marginTop: '1.5rem', width: '100%' }} onClick={onClose}>Đóng lại</button>
+                            <h4>Order submitted successfully!</h4>
+                            <p>We have received your configuration details. Semcomputer staff will contact you shortly via phone to advise and proceed with payment.</p>
+                            <p className="note" style={{ fontSize: '0.85rem', color: '#888', marginTop: '10px' }}>
+                                Note: If you do not receive an email confirmation, please check your spam folder (for the administrator).
+                            </p>
+                            <button className="btn-primary" style={{ marginTop: '1.5rem', width: '100%' }} onClick={onClose}>Close</button>
                         </div>
                     ) : (
                         <>
-                            <p className="checkout-subtitle">Vui lòng điền thông tin để chúng tôi liên lạc và xác nhận bill cho bạn.</p>
+                            <p className="checkout-subtitle">Please fill in your information for us to contact and confirm your bill.</p>
                             <form className="checkout-form" onSubmit={handleSubmit} data-netlify="true" name="order-form">
                                 <input type="hidden" name="form-name" value="order-form" />
                                 <div className="form-group">
-                                    <label>Họ và Tên *</label>
-                                    <input type="text" name="name" required placeholder="Nhập tên của bạn" />
+                                    <label>Full Name *</label>
+                                    <input type="text" name="name" required placeholder="Enter your name" />
                                 </div>
                                 <div className="form-group">
-                                    <label>Số điện thoại *</label>
-                                    <input type="tel" name="phone" required placeholder="Nhập số điện thoại để liên lạc" />
+                                    <label>Phone Number *</label>
+                                    <input type="tel" name="phone" required placeholder="Enter phone number for contact" />
                                 </div>
                                 <div className="form-group">
-                                    <label>Địa chỉ nhận hàng</label>
-                                    <textarea name="address" rows="2" placeholder="Nhập địa chỉ của bạn (Tuỳ chọn)"></textarea>
+                                    <label>Shipping Address</label>
+                                    <textarea name="address" rows="2" placeholder="Enter your address (Optional)"></textarea>
                                 </div>
                                 <div className="form-group">
-                                    <label>Ghi chú thêm</label>
-                                    <textarea name="note" rows="2" placeholder="Ví dụ: Mong muốn tư vấn thêm đèn LED, nâng cấp thêm RAM (Tuỳ chọn)..."></textarea>
+                                    <label>Additional Notes</label>
+                                    <textarea name="note" rows="2" placeholder="Example: Want advice on LED, RAM upgrade (Optional)..."></textarea>
                                 </div>
 
                                 <div className="checkout-summary">
                                     <div className="checkout-total">
-                                        <span>Tổng dự tính:</span>
+                                        <span>Estimated Total:</span>
                                         <span className="amount">{formatPrice(totalPrice)}</span>
                                     </div>
                                 </div>
 
                                 <div className="form-actions" style={{ display: 'flex', gap: '10px', marginTop: '1rem' }}>
-                                    <button type="button" className="btn-secondary" style={{ flex: 1 }} onClick={onClose}>Hủy</button>
+                                    <button type="button" className="btn-secondary" style={{ flex: 1 }} onClick={onClose}>Cancel</button>
                                     <button type="submit" className="btn-primary" style={{ flex: 2 }} disabled={loading}>
-                                        {loading ? 'Đang gửi...' : 'Gửi Yêu Cầu Đặt PC'}
+                                        {loading ? 'Sending...' : 'Submit PC Order Request'}
                                     </button>
                                 </div>
                             </form>
