@@ -330,7 +330,7 @@ function calculateScore(issues, warnings, strengths, selectedCount, totalPrice, 
     score += Math.min(selectedCount * 2, 10);
 
     // Clamp
-    return Math.max(0, Math.min(100, Math.round(score)));
+    return Math.max(0, Math.min(95, Math.round(score)));
 }
 
 export function getSmartSuggestions(selectedComponents, allComponents) {
