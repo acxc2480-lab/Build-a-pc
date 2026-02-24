@@ -130,6 +130,17 @@ body {
   transition: background var(--transition-md), border-color var(--transition-md);
 }
 
+.navbar-spacer {
+  flex: 1;
+}
+
+.navbar-center {
+  display: flex;
+  align-items: center;
+  flex: 2;
+  justify-content: center;
+}
+
 .navbar-brand {
   display: flex;
   align-items: center;
@@ -153,7 +164,7 @@ body {
   align-items: center;
   gap: 1.5rem;
   list-style: none;
-  margin-left: 1rem;
+  margin-left: 2rem;
 }
 
 .navbar-nav a {
@@ -192,6 +203,8 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex: 1;
+  justify-content: flex-end;
 }
 
 .nav-icon {
