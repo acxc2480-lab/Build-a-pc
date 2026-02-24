@@ -299,22 +299,20 @@ function checkIsPresetMatch(selectedComponents) {
 function calculateScore(issues, warnings, strengths, selectedCount, totalPrice, selectedComponents) {
     if (selectedCount < 2) return 0;
 
-    let baseScore = 95;
-
     const isMatched = checkIsPresetMatch(selectedComponents);
 
     if (isMatched) {
+        return 95;
+    }
+
+    let baseScore = 80;
+
+    if (totalPrice >= 60000000) {
         baseScore = 95;
-    } else {
-        if (totalPrice >= 60000000) {
-            baseScore = 95;
-        } else if (totalPrice > 40000000) {
-            baseScore = 90;
-        } else if (totalPrice > 20000000) {
-            baseScore = 85;
-        } else {
-            baseScore = 80;
-        }
+    } else if (totalPrice > 40000000) {
+        baseScore = 90;
+    } else if (totalPrice > 20000000) {
+        baseScore = 85;
     }
 
     let score = baseScore;
