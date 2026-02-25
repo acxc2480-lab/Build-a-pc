@@ -17,7 +17,7 @@ export default function Navbar({ isDark, onToggleTheme }) {
                     <li><a href="https://semcomputer.com/contact/" target="_blank" rel="noreferrer">Contact</a></li>
                     <li><a href="https://semcomputer.com/terms-of-use/" target="_blank" rel="noreferrer">Terms of use</a></li>
                     <li><a href="https://semcomputer.com/blog/" target="_blank" rel="noreferrer">Blog</a></li>
-                    <li><a href="#" className="active">Build</a></li>
+                    <li><a href="#" className="active">Compatibility</a></li>
                 </ul>
             </div>
 
